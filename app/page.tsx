@@ -459,7 +459,7 @@ function SkillsSection() {
                   <h3 className="text-xl font-semibold text-surface">{category.title}</h3>
                 </div>
                 
-                <div className="space-y-4">
+                <div className="space-y-3">
                   {category.skills.map((skill, skillIndex) => (
                     <motion.div
                       key={skill.name}
@@ -467,20 +467,11 @@ function SkillsSection() {
                       whileInView={{ opacity: 1, x: 0 }}
                       viewport={{ once: true }}
                       transition={{ delay: skillIndex * 0.05 }}
+                      className="glass-card p-3 border border-white/5 hover:border-vermilion/30 transition-all group"
                     >
-                      <div className="flex items-center justify-between mb-2">
+                      <div className="flex items-center gap-3">
+                        <div className="w-2 h-2 rounded-full bg-vermilion group-hover:animate-pulse" />
                         <span className="font-medium text-surface text-sm">{skill.name}</span>
-                        <span className="font-mono text-xs text-vermilion">
-                          {inView ? <CountUp end={skill.level} duration={2} />  : 0}%
-                        </span>
-                      </div>
-                      <div className="progress-bar">
-                        <motion.div
-                          initial={{ width: 0 }}
-                          animate={inView ? { width: `${skill.level}%` } : {}}
-                          transition={{ duration: 1.5, delay: skillIndex * 0.1 }}
-                          className="progress-fill"
-                        />
                       </div>
                     </motion.div>
                   ))}
