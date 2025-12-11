@@ -23,6 +23,10 @@ import { projects } from '@/data/projects';
 import { skillCategories } from '@/data/skills';
 import { experiences, education, certifications } from '@/data/experience';
 import { achievements } from '@/data/achievements';
+import TerminalAnimation from '@/components/TerminalAnimation';
+import ScrollReveal from '@/components/ScrollReveal';
+import CountUp from 'react-countup';
+import { useInView } from 'react-intersection-observer';
 
 export default function Home() {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -45,7 +49,9 @@ export default function Home() {
 function HeroSection() {
   return (
     <section id="home" className="min-h-screen flex items-center justify-center relative overflow-hidden">
+      {/* Animated Background */}
       <div className="absolute inset-0">
+        <div className="absolute inset-0 gradient-bg opacity-5" />
         <div
           className="absolute inset-0 opacity-[0.02]"
           style={{
@@ -62,7 +68,7 @@ function HeroSection() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.2 }}
-          className="inline-block font-mono text-xs tracking-ultra-wide text-vermilion mb-8"
+          className="inline-block font-mono text-xs tracking-ultra-wide text-vermilion mb-8 glow-red"
         >
           CYBER SECURITY SPECIALIST
         </motion.span>
@@ -71,10 +77,10 @@ function HeroSection() {
           initial={{ opacity: 0, y: 40 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.4 }}
-          className="text-surface font-bold tracking-wider mb-6"
+          className="text-surface font-bold tracking-wider mb-6 float-animation"
         >
           <span className="block">SNEHA</span>
-          <span className="block text-vermilion">ARAVIND</span>
+          <span className="block gradient-text">ARAVIND</span>
         </motion.h1>
 
         <motion.p
@@ -87,13 +93,22 @@ function HeroSection() {
           and cutting-edge cloud security solutions.
         </motion.p>
 
+        {/* Terminal Animation */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.8 }}
-          className="flex flex-col sm:flex-row items-center justify-center gap-4"
+          transition={{ duration: 0.6, delay: 0.7 }}
         >
-          <a href="#projects" className="btn-primary">
+          <TerminalAnimation />
+        </motion.div>
+
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.9 }}
+          className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-16"
+        >
+          <a href="#projects" className="btn-primary glow-red-hover">
             <span className="flex items-center gap-2">
               View Projects
               <ArrowRight size={18} />
@@ -107,8 +122,8 @@ function HeroSection() {
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          transition={{ duration: 0.6, delay: 1 }}
-          className="flex items-center justify-center gap-6 mt-16"
+          transition={{ duration: 0.6, delay: 1.1 }}
+          className="flex items-center justify-center gap-6"
         >
           {[
             { icon: Github, href: 'https://github.com/snehaaravind', label: 'GitHub' },
@@ -120,8 +135,8 @@ function HeroSection() {
               href={social.href}
               target="_blank"
               rel="noopener noreferrer"
-              whileHover={{ y: -4 }}
-              className="w-12 h-12 flex items-center justify-center border border-white/10 text-neutral/40 hover:border-vermilion hover:text-vermilion transition-all duration-300"
+              whileHover={{ y: -4, scale: 1.1 }}
+              className="glass-card w-12 h-12 flex items-center justify-center border border-white/10 text-neutral/40 hover:border-vermilion hover:text-vermilion transition-all duration-300 glow-red-hover"
               aria-label={social.label}
             >
               <social.icon size={20} />
@@ -134,7 +149,7 @@ function HeroSection() {
         href="#about"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
-        transition={{ delay: 1.2 }}
+        transition={{ delay: 1.3 }}
         className="absolute bottom-12 left-1/2 -translate-x-1/2"
       >
         <motion.div
@@ -418,72 +433,84 @@ function ProjectsSection() {
 // SKILLS SECTION
 // ============================================
 function SkillsSection() {
-  return (
-    <section id="skills" className="section-padding bg-dark-400">
-      <div className="container-main">
-        <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="mb-12">
-          <span className="section-label">Expertise</span>
-          <h2 className="section-title">Skills & Technologies</h2>
-          <p className="text-neutral/60 max-w-2xl mt-4">A comprehensive overview of my technical proficiencies across various domains.</p>
-          <div className="section-divider" />
-        </motion.div>
+  const [ref, inView] = useInView({ triggerOnce: true, threshold: 0.1 });
 
-        <div className="space-y-12">
+  return (
+    <section id="skills" className="section-padding bg-dark-400" ref={ref}>
+      <div className="container-main">
+        <ScrollReveal>
+          <div className="mb-12">
+            <span className="section-label">Expertise</span>
+            <h2 className="section-title gradient-text">Skills & Technologies</h2>
+            <p className="text-neutral/60 max-w-2xl mt-4">A comprehensive overview of my technical proficiencies across various domains.</p>
+            <div className="section-divider" />
+          </div>
+        </ScrollReveal>
+
+        {/* Bento Grid Layout */}
+        <div className="bento-grid">
           {skillCategories.map((category, catIndex) => (
-            <motion.div key={category.id} initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: catIndex * 0.1 }}>
-              <div className="flex items-center gap-4 mb-6">
-                <div className="w-10 h-10 flex items-center justify-center bg-dark-300 border border-white/5">
-                  <category.icon size={20} className="text-vermilion" />
+            <ScrollReveal key={category.id} delay={catIndex * 0.1}>
+              <div className={`glass-card glass-card-hover p-6 ${catIndex === 0 ? 'bento-item-large' : ''}`}>
+                <div className="flex items-center gap-4 mb-6">
+                  <div className="w-12 h-12 flex items-center justify-center glass-card border border-vermilion/20 glow-red">
+                    <category.icon size={24} className="text-vermilion" />
+                  </div>
+                  <h3 className="text-xl font-semibold text-surface">{category.title}</h3>
                 </div>
-                <h3 className="text-lg font-semibold text-surface">{category.title}</h3>
+                
+                <div className="space-y-4">
+                  {category.skills.map((skill, skillIndex) => (
+                    <motion.div
+                      key={skill.name}
+                      initial={{ opacity: 0, x: -20 }}
+                      whileInView={{ opacity: 1, x: 0 }}
+                      viewport={{ once: true }}
+                      transition={{ delay: skillIndex * 0.05 }}
+                    >
+                      <div className="flex items-center justify-between mb-2">
+                        <span className="font-medium text-surface text-sm">{skill.name}</span>
+                        <span className="font-mono text-xs text-vermilion">
+                          {inView ? <CountUp end={skill.level} duration={2} />  : 0}%
+                        </span>
+                      </div>
+                      <div className="progress-bar">
+                        <motion.div
+                          initial={{ width: 0 }}
+                          animate={inView ? { width: `${skill.level}%` } : {}}
+                          transition={{ duration: 1.5, delay: skillIndex * 0.1 }}
+                          className="progress-fill"
+                        />
+                      </div>
+                    </motion.div>
+                  ))}
+                </div>
               </div>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                {category.skills.map((skill, skillIndex) => (
-                  <motion.div
-                    key={skill.name}
-                    initial={{ opacity: 0, x: -20 }}
-                    whileInView={{ opacity: 1, x: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ delay: skillIndex * 0.05 }}
-                    className="group p-4 bg-dark-300 border border-white/5 hover:border-vermilion/30 transition-all"
-                  >
-                    <div className="flex items-center justify-between mb-2">
-                      <span className="font-medium text-surface text-sm">{skill.name}</span>
-                      <span className="font-mono text-xs text-neutral/40">{skill.level}%</span>
-                    </div>
-                    <div className="h-1 bg-dark-500 overflow-hidden">
-                      <motion.div
-                        initial={{ width: 0 }}
-                        whileInView={{ width: `${skill.level}%` }}
-                        viewport={{ once: true }}
-                        transition={{ duration: 1, delay: 0.2 }}
-                        className="h-full bg-gradient-to-r from-vermilion to-vermilion/50"
-                      />
-                    </div>
-                  </motion.div>
-                ))}
-              </div>
-            </motion.div>
+            </ScrollReveal>
           ))}
         </div>
 
-        <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="mt-16 text-center">
-          <h3 className="text-lg font-semibold text-surface mb-6">Tools I Use Daily</h3>
-          <div className="flex flex-wrap justify-center gap-3">
-            {['Kali Linux', 'Wireshark', 'Packet Tracer', 'Azure', 'VS Code', 'Git', 'Python', 'Java', 'MySQL', 'Django'].map((tool, index) => (
-              <motion.span
-                key={tool}
-                initial={{ opacity: 0, scale: 0.9 }}
-                whileInView={{ opacity: 1, scale: 1 }}
-                viewport={{ once: true }}
-                transition={{ delay: index * 0.03 }}
-                className="px-4 py-2 bg-dark-300 border border-white/5 text-sm text-neutral/60 hover:border-vermilion/30 hover:text-surface transition-all"
-              >
-                {tool}
-              </motion.span>
-            ))}
+        {/* Interactive Tools */}
+        <ScrollReveal delay={0.4}>
+          <div className="mt-16 glass-card p-8 text-center gradient-border">
+            <h3 className="text-lg font-semibold text-surface mb-6">Tools I Use Daily</h3>
+            <div className="flex flex-wrap justify-center gap-3">
+              {['Kali Linux', 'Wireshark', 'Packet Tracer', 'Azure', 'VS Code', 'Git', 'Python', 'Java', 'MySQL', 'Django'].map((tool, index) => (
+                <motion.span
+                  key={tool}
+                  initial={{ opacity: 0, scale: 0.9 }}
+                  whileInView={{ opacity: 1, scale: 1 }}
+                  viewport={{ once: true }}
+                  whileHover={{ scale: 1.1, y: -2 }}
+                  transition={{ delay: index * 0.03 }}
+                  className="px-4 py-2 glass-card border border-white/5 text-sm text-neutral/60 hover:border-vermilion/50 hover:text-surface transition-all glow-red-hover"
+                >
+                  {tool}
+                </motion.span>
+              ))}
+            </div>
           </div>
-        </motion.div>
+        </ScrollReveal>
       </div>
     </section>
   );

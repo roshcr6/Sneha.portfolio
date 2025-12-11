@@ -1,8 +1,9 @@
 'use client';
 
-import { motion } from 'framer-motion';
+import { motion, useMotionValue, useSpring, useTransform } from 'framer-motion';
 import { ExternalLink, Github, ArrowUpRight } from 'lucide-react';
 import Image from 'next/image';
+import { MouseEvent } from 'react';
 
 interface ProjectCardProps {
   title: string;
@@ -23,13 +24,46 @@ export default function ProjectCard({
   demo,
   index,
 }: ProjectCardProps) {
+  const x = useMotionValue(0);
+  const y = useMotionValue(0);
+
+  const mouseXSpring = useSpring(x);
+  const mouseYSpring = useSpring(y);
+
+  const rotateX = useTransform(mouseYSpring, [-0.5, 0.5], ['7.5deg', '-7.5deg']);
+  const rotateY = useTransform(mouseXSpring, [-0.5, 0.5], ['-7.5deg', '7.5deg']);
+
+  const handleMouseMove = (e: MouseEvent<HTMLElement>) => {
+    const rect = e.currentTarget.getBoundingClientRect();
+    const width = rect.width;
+    const height = rect.height;
+    const mouseX = e.clientX - rect.left;
+    const mouseY = e.clientY - rect.top;
+    const xPct = mouseX / width - 0.5;
+    const yPct = mouseY / height - 0.5;
+    x.set(xPct);
+    y.set(yPct);
+  };
+
+  const handleMouseLeave = () => {
+    x.set(0);
+    y.set(0);
+  };
+
   return (
     <motion.article
       initial={{ opacity: 0, y: 40 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: '-50px' }}
       transition={{ duration: 0.6, delay: index * 0.1 }}
-      className="group relative bg-dark-200 border border-white/5 overflow-hidden"
+      style={{
+        rotateX,
+        rotateY,
+        transformStyle: 'preserve-3d',
+      }}
+      onMouseMove={handleMouseMove}
+      onMouseLeave={handleMouseLeave}
+      className="group relative glass-card glass-card-hover overflow-hidden"
     >
       {/* Image Container */}
       <div className="relative h-56 overflow-hidden bg-dark-300">
@@ -58,8 +92,8 @@ export default function ProjectCard({
       </div>
 
       {/* Content */}
-      <div className="p-6">
-        <h3 className="text-xl font-semibold text-surface mb-3 group-hover:text-vermilion transition-colors">
+      <div className="p-6" style={{ transform: 'translateZ(50px)' }}>
+        <h3 className="text-xl font-semibold text-surface mb-3 group-hover:text-vermilion transition-colors gradient-text">
           {title}
         </h3>
         
@@ -72,7 +106,7 @@ export default function ProjectCard({
           {tech.map((item) => (
             <span
               key={item}
-              className="px-2 py-1 text-xs font-mono text-neutral/50 bg-dark-300 border border-white/5"
+              className="px-2 py-1 text-xs font-mono text-neutral/50 glass-card border border-white/5 hover:border-vermilion/30 transition-all"
             >
               {item}
             </span>
