@@ -89,16 +89,19 @@ export default function CustomCursor() {
             viewBox="0 0 100 100"
             className="w-full h-full"
             style={{
-              filter: 'drop-shadow(0 0 8px rgba(230, 57, 70, 0.8))',
+              filter: 'drop-shadow(0 0 12px rgba(230, 57, 70, 1)) drop-shadow(0 0 20px rgba(230, 57, 70, 0.8)) drop-shadow(0 0 30px rgba(230, 57, 70, 0.6))',
             }}
           >
             {/* Hexagon shape */}
             <polygon
               points="50,5 93.3,27.5 93.3,72.5 50,95 6.7,72.5 6.7,27.5"
-              fill="none"
+              fill="rgba(230, 57, 70, 0.1)"
               stroke="#E63946"
-              strokeWidth="2"
+              strokeWidth="3"
               className="transition-all duration-300"
+              style={{
+                filter: 'drop-shadow(0 0 5px rgba(230, 57, 70, 0.8))',
+              }}
             />
             {/* Inner lines - scanner effect */}
             <line
@@ -132,19 +135,22 @@ export default function CustomCursor() {
             <circle
               cx="50"
               cy="50"
-              r="3"
+              r="4"
               fill="#E63946"
               className={isPointer ? 'animate-pulse' : ''}
+              style={{
+                filter: 'drop-shadow(0 0 8px rgba(230, 57, 70, 1)) drop-shadow(0 0 15px rgba(230, 57, 70, 0.8))',
+              }}
             />
           </svg>
 
           {/* Corner brackets */}
           {isPointer && (
             <>
-              <div className="absolute -top-2 -left-2 w-3 h-3 border-t-2 border-l-2 border-vermilion" />
-              <div className="absolute -top-2 -right-2 w-3 h-3 border-t-2 border-r-2 border-vermilion" />
-              <div className="absolute -bottom-2 -left-2 w-3 h-3 border-b-2 border-l-2 border-vermilion" />
-              <div className="absolute -bottom-2 -right-2 w-3 h-3 border-b-2 border-r-2 border-vermilion" />
+              <div className="absolute -top-2 -left-2 w-3 h-3 border-t-2 border-l-2 border-vermilion shadow-[0_0_10px_rgba(230,57,70,1)]" />
+              <div className="absolute -top-2 -right-2 w-3 h-3 border-t-2 border-r-2 border-vermilion shadow-[0_0_10px_rgba(230,57,70,1)]" />
+              <div className="absolute -bottom-2 -left-2 w-3 h-3 border-b-2 border-l-2 border-vermilion shadow-[0_0_10px_rgba(230,57,70,1)]" />
+              <div className="absolute -bottom-2 -right-2 w-3 h-3 border-b-2 border-r-2 border-vermilion shadow-[0_0_10px_rgba(230,57,70,1)]" />
             </>
           )}
 
